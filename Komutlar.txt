@@ -1,0 +1,11 @@
+pip freeze -> sanal ortamımızda hangi kütüphaneler yüklü
+
+pip freeze > dosya_adi.txt  -> sanal ortamımızdaki yüklü kütüphaneleri bir dosyaya yazar
+
+pip install -r dosya_adi.txt  -> sanal ortama dosyadan okuduğu kütüphaneleri yükler
+
+pip install faker -> faker kütüphanesini yükler
+
+
+*****************CKEDITOR***************
+pip install django-ckeditor -> ckeditor'u sanal ortamımıza kurduk

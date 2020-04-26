@@ -1,0 +1,12 @@
+from faker import Faker
+
+
+faker = Faker('tr_TR') # istersek dil parametresi verebiliriz
+
+for i in range(1,10):
+    yazi = {'baslik':faker.name(),'icerik':faker.paragraph()}
+    print(f"{yazi['baslik']} adlı yazının içeriği -> {yazi['icerik']}")
+
+
+
+# daha ayrıntılı bilgi için -> https://faker.readthedocs.io/

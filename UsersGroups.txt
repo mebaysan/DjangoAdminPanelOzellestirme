@@ -1,0 +1,9 @@
+    KULLANICI TİPLERİblog
+Non staff users -> Personel olmayan kullanıcılar
+    is_staff = False & is_superuser = False
+
+Staff users -> Personel olan fakat izinlere tabi olan kullanıcılar
+    is_staff = True & is_superuser = False
+
+Superusers -> Admin panellerin şah'ı, izne gerek duymayan kullanıcılar
+    is_staff = True & is_superuser = True

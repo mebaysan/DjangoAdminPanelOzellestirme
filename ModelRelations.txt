@@ -1,0 +1,4 @@
+One to One -> Blog ve Blog Ayarı
+One to Many -> Blog ve Yorumlar
+Many to Many -> Blog ve Etiketler
+

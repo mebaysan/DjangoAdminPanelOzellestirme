@@ -1,0 +1,10 @@
+Basit ama önemli
+
+HTTPS altında yayınlamak
+
+herkese superuser yetkisi vermemek
+
+özellikle kiritik değere sahip modeller'in silinebilmesini her gruba ve staff'a vermemek
+
+
+kontrolün sağlanabilmesi açısından superuserları sınırlı tutmak
