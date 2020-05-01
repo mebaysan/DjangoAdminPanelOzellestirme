@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blog.apps.BlogConfig',
     'ckeditor',  # kullandığımız editörü INSTALLED_APPS'e register etmeyi unutmamalıyız
+    'ckeditor_uploader',
     'django_admin_listfilter_dropdown',
     'rangefilter',
     'leaflet',
@@ -122,6 +123,15 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "staticfiles"),
+]
+
+STATIC_ROOT = os.path.join(BASE_DIR,'static')
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') # media'lar nereye yüklenecek
+MEDIA_URL = '/media/' # media url'ler nasıl gelecek
+
 CKEDITOR_CONFIGS = {  # eğer istersek (editöre bağlı olarak) configürasyonlar ile oynayabiliriz
     'default': {
         'toolbar': 'full',
@@ -129,3 +139,6 @@ CKEDITOR_CONFIGS = {  # eğer istersek (editöre bağlı olarak) configürasyonl
         'width': 1000
     }
 }
+
+
+CKEDITOR_UPLOAD_PATH = 'uploads/'

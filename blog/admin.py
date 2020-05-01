@@ -6,7 +6,7 @@ from rangefilter.filter import DateTimeRangeFilter  # https://github.com/silents
 from leaflet.admin import LeafletGeoAdmin  # https://django-leaflet.readthedocs.io/en/latest/installation.html
 from import_export.admin import ImportExportModelAdmin
 from blog.resources import YorumResource # https://django-import-export.readthedocs.io/en/latest/index.html
-
+from django.utils.safestring import mark_safe
 
 class YorumInline(admin.TabularInline):
     model = Yorum  # hangi model üzerinde çalışacağız
@@ -18,7 +18,7 @@ class YorumInline(admin.TabularInline):
 class BlogAdmin(admin.ModelAdmin):
     list_display = (
         'baslik', 'eklenme_tarihi', 'guncellenme_tarihi', 'yayin_mi',
-        'kac_gun_once', 'kac_yorum_var')  # Liste sayfasında hangi field'lar listelensin
+        'kac_gun_once', 'kac_yorum_var','liste_resim_getir')  # Liste sayfasında hangi field'lar listelensin
     list_filter = ('yayin_mi', (
         'eklenme_tarihi', DateTimeRangeFilter),)  # istediğimiz field'a göre sağ tarafta bir süzgeç çıkar (yayin mı vb.)
     ordering = ('baslik',
@@ -30,6 +30,7 @@ class BlogAdmin(admin.ModelAdmin):
     list_per_page = 50  # sayfa başına kaç adet veri göstermek istiyoruz
     actions = ('yayina_al',)
     date_hierarchy = 'guncellenme_tarihi'
+    readonly_fields = ('detay_resim_getir',)
     # fields=(('baslik','slug'),'icerik','yayin_mi') # tuple içerisindeki her eleman 1 satıra denk gelir. eleman olarak tuple verirsek ve içerisine istediğimiz fieldları geçersek tek satırda gözükecektir
     fieldsets = (
         (None, {  # None -> Field kümemizin başlığı
@@ -37,7 +38,7 @@ class BlogAdmin(admin.ModelAdmin):
             'description': 'Yazı için genel ayarlar'  # bu kümenin açıklaması
         }),  # 2. kümemizi verirken tekrar tuple olarak vermeliyiz
         ('Opsiyonel Ayarlar', {
-            'fields': ('yayin_mi', 'kategoriler'),
+            'fields': ('yayin_mi', 'kategoriler','resim','detay_resim_getir'),
             # sonradan eklediğimiz fieldları field kümelerimize eklemeyi unutmamalıyız
             'description': 'Opsyionel Ayarlar için bu kümeyi kullanabilirsiniz',
             'classes': ('collapse',)  # Dropdown yapısı
@@ -55,6 +56,12 @@ class BlogAdmin(admin.ModelAdmin):
         self.message_user(request, f"{count} adet yazı yayına alındı")
 
     yayina_al.short_description = 'İşaretlenen Yazıları Yayına Al'
+
+    def liste_resim_getir(self,obj):
+        if obj.resim:
+            return mark_safe(f"<img src={obj.resim.url} width=50 height=50></img>")
+        return mark_safe("---------")
+    liste_resim_getir.short_description = 'Yazı Resmi'
 
 
 class YorumAdmin(ImportExportModelAdmin):
