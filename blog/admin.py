@@ -7,6 +7,9 @@ from leaflet.admin import LeafletGeoAdmin  # https://django-leaflet.readthedocs.
 from import_export.admin import ImportExportModelAdmin
 from blog.resources import YorumResource # https://django-import-export.readthedocs.io/en/latest/index.html
 from django.utils.safestring import mark_safe
+from django.core import serializers
+from django.http import HttpResponse
+
 
 class YorumInline(admin.TabularInline):
     model = Yorum  # hangi model üzerinde çalışacağız
@@ -28,7 +31,7 @@ class BlogAdmin(admin.ModelAdmin):
     prepopulated_fields = {
         'slug': ('baslik',)}  # birbiri ile bağıntılı olan field'lar kullanılır.  {'hangi_field',('neye_ile_bagli',)}
     list_per_page = 50  # sayfa başına kaç adet veri göstermek istiyoruz
-    actions = ('yayina_al',)
+    actions = ('yayina_al','export_to_json')
     date_hierarchy = 'guncellenme_tarihi'
     readonly_fields = ('detay_resim_getir',)
     # fields=(('baslik','slug'),'icerik','yayin_mi') # tuple içerisindeki her eleman 1 satıra denk gelir. eleman olarak tuple verirsek ve içerisine istediğimiz fieldları geçersek tek satırda gözükecektir
@@ -63,6 +66,12 @@ class BlogAdmin(admin.ModelAdmin):
         return mark_safe("---------")
     liste_resim_getir.short_description = 'Yazı Resmi'
 
+    def export_to_json(self,request,queryset):
+        response = HttpResponse(content_type='application/json')
+        response['Content-Disposition'] = 'attachment; filename=gelen.json'
+        serializers.serialize('json',queryset,stream=response)
+        return response
+    export_to_json.short_description = 'Seçilen verileri Jsona çevir'
 
 class YorumAdmin(ImportExportModelAdmin):
     list_display = ('__str__', 'eklenme_tarihi', 'yayin_mi')
