@@ -9,7 +9,7 @@ from blog.resources import YorumResource # https://django-import-export.readthed
 from django.utils.safestring import mark_safe
 from django.core import serializers
 from django.http import HttpResponse
-
+import csv
 
 class YorumInline(admin.TabularInline):
     model = Yorum  # hangi model üzerinde çalışacağız
@@ -82,9 +82,20 @@ class YorumAdmin(ImportExportModelAdmin):
     )
     resource_class = YorumResource
     raw_id_fields = ('blog',)
+    actions = ('export_to_csv',)
 
     def has_delete_permission(self, request, obj=None): # kendi class'ımızı override ettik ve silinebilme özelliğini kapattık
         return False
+
+    def export_to_csv(self,request,queryset):
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=yorumlar.csv'
+        writer = csv.writer(response)
+        writer.writerow(['Blog Adı','Yorum','Yayın Mı'])
+        for yorum in queryset:
+            writer.writerow([yorum.blog.baslik,yorum.yorum,'EVET' if yorum.yayin_mi else 'HAYIR'])
+        return response
+    export_to_csv.short_description = 'Seçilen Yorumları CSV Olarak Al'
 
 admin.site.register(Blog,
                     BlogAdmin)  # Model Admin class'ı oluşturduğumuzda, bunu admin app'e register ederken ilgili model ile veriyoruz ve Django otomatik bind ediyor
