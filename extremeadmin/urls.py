@@ -17,13 +17,17 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from blog.admin_views import get_comments
 
 urlpatterns = [
-    #path('grappelli/', include('grappelli.urls')),  # hiyerarşik yapı önemlidir
-    path('admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
-    path('panel/', admin.site.urls),
-    path('ckeditor/', include('ckeditor_uploader.urls')),
-]+ static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+                  # path('grappelli/', include('grappelli.urls')),  # hiyerarşik yapı önemlidir
+                  path('admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
+                  path('panel/', admin.site.urls),
+                  path('ckeditor/', include('ckeditor_uploader.urls')),
+                  path('ckeditor/', include('ckeditor_uploader.urls')),
+                  path('panel/blog/get-comments/<int:pk>/', get_comments, name='custom_get_comments'),
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL,
+                                                                                         document_root=settings.STATIC_ROOT)
 
 admin.site.site_title = 'Extreme Title'
 

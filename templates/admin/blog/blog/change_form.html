@@ -1,0 +1,5 @@
+{% extends 'admin/change_form.html' %}
+{% block form_top %}
+    <h1>Blog model için change_form.html değişti! <br> Bloga ait yorumları listeleyebilirsiniz <a
+            href="{% url 'custom_get_comments' pk=original.pk %}" style="color: red;">BURADAN</a></h1>
+{% endblock %}
